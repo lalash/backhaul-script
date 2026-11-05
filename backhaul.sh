@@ -110,30 +110,29 @@ fi
 ARCH=$(uname -m)
 case "$ARCH" in
 x86_64)
-PRIMARY_URL="http://script.backhaul.top:2095/backhaul_premium_amd64.tar.gz"
-FALLBACK_URL="http://79.175.167.114:2095/backhaul_premium_amd64.tar.gz"
-;;
-arm64|aarch64)
-PRIMARY_URL="http://script.backhaul.top:2095/backhaul_premium_arm64.tar.gz"
-FALLBACK_URL="http://79.175.167.114:2095/backhaul_premium_arm64.tar.gz"
+CORE_URL="https://github.com/lalash/backhaul-script/releases/download/v1.0.0/backhaul_premium"
+CORE_SHA256="084ccd5c63605f58a655ab8b53d75552c1e878a4c0fc4168cd0b45f183d8ed1a"
 ;;
 *)
-colorize red "Unsupported architecture: $ARCH."
+colorize red "Unsupported architecture: $ARCH (only x86_64 is available)."
 exit 1
 ;;
 esac
 DOWNLOAD_DIR=$(mktemp -d)
-echo "Downloading Backhaul..."
-if ! curl -sSL --max-time 10 -o "$DOWNLOAD_DIR/backhaul.tar.gz" "$PRIMARY_URL"; then
-colorize yellow "Primary download failed. Trying fallback..."
-curl -sSL --max-time 30 -o "$DOWNLOAD_DIR/backhaul.tar.gz" "$FALLBACK_URL" || {
+echo "Downloading Backhaul core from GitHub..."
+if ! curl -fsSL --retry 3 --max-time 300 -o "$DOWNLOAD_DIR/backhaul_premium" "$CORE_URL"; then
 colorize red "Download failed."
 rm -rf "$DOWNLOAD_DIR"
 exit 1
-}
+fi
+if ! echo "$CORE_SHA256  $DOWNLOAD_DIR/backhaul_premium" | sha256sum -c --status; then
+colorize red "Checksum mismatch. Aborting."
+rm -rf "$DOWNLOAD_DIR"
+exit 1
 fi
 mkdir -p "$config_dir"
-tar -xzf "$DOWNLOAD_DIR/backhaul.tar.gz" -C "$config_dir"
+mv "$DOWNLOAD_DIR/backhaul_premium" "${config_dir}/backhaul_premium"
+rm -rf "$DOWNLOAD_DIR"
 chmod u+x "${config_dir}/backhaul_premium"
 colorize green "Backhaul installation completed."
 }

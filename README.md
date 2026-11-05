@@ -14,7 +14,7 @@ bash <(curl -Ls https://raw.githubusercontent.com/lalash/backhaul-script/main/ba
 
 - Linux با `systemd` و `apt-get` (برای نصب خودکار `jq`)
 - دسترسی root
-- معماری `x86_64` یا `arm64`
+- معماری `x86_64`
 - **لایسنس معتبر Backhaul Premium** برای IP سرور (هسته بدون لایسنس اجرا نمی‌شود)
 
 ## امکانات منو
@@ -39,6 +39,6 @@ bash <(curl -Ls https://raw.githubusercontent.com/lalash/backhaul-script/main/ba
 
 ## نکات
 
-- اسکریپت در اجرای اول هسته را از `script.backhaul.top:2095` (و در صورت خطا از `79.175.167.114:2095`) دانلود می‌کند. این دانلود روی HTTP و بدون بررسی checksum است.
-- فایل باینری هسته (`backhaul_premium`، amd64) در بخش [Releases](https://github.com/lalash/backhaul-script/releases) هم قرار دارد.
-- این نسخه، شکل خوانا (deobfuscate‌شده) اسکریپت اصلی است و رفتار آن تغییری نکرده است.
+- اسکریپت هسته (`backhaul_premium`) را از بخش [Releases](https://github.com/lalash/backhaul-script/releases) همین ریپو روی HTTPS دانلود می‌کند و SHA256 آن را بررسی می‌کند.
+- فعلاً فقط نسخه `x86_64` (amd64) هسته موجود است.
+- این نسخه، شکل خوانا (deobfuscate‌شده) اسکریپت اصلی است؛ تنها تغییر، منبع دانلود هسته است.
